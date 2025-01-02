@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: Library API
+  version: 1.0.0
+  description: A simple API to manage library books
+  x-microcks:
+    labels:
+      domain: library
+      status: beta
+      team: Library API Team
+paths:
+  /books:
+    get:
+      summary: List all books
+      operationId: listBooks
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of books to return
+          required: false
+          schema:
+            type: integer
+          examples:
+            list_all_books:
+              value: 10
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+              examples:
+                list_all_books:
+                  value: [
+                    {
+                      "id": "1",
+                      "title": "The Hobbit",
+                      "author": "J.R.R. Tolkien",
+                      "isbn": "978-0547928227",
+                      "publishedYear": 1937
+                    },
+                    {
+                      "id": "2",
+                      "title": "1984",
+                      "author": "George Orwell",
+                      "isbn": "978-0451524935",
+                      "publishedYear": 1949
+                    }
+                  ]
+  /books/{id}:
+    get:
+      summary: Get book by ID
+      operationId: getBook
+      x-microcks-operation:
+        delay: 100
+        dispatcher: SCRIPT
+        dispatcherRules: |
+          def url = mockRequest.getRequest().getRequestURI();
+          if (url.endsWith("/books/999")) {
+              return "get_book_not_found";
+          }
+          return "get_book_1";
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          examples:
+            get_book_1:
+              value: "1"
+            get_book_not_found:
+              value: "999"
+      responses:
+        '200':
+          description: Book details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+              examples:
+                get_book_1:
+                  value: {
+                    "id": "1",
+                    "title": "The Hobbit",
+                    "author": "J.R.R. Tolkien",
+                    "isbn": "978-0547928227",
+                    "publishedYear": 1937
+                  }
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                get_book_not_found:
+                  value: {
+                    "message": "Book not found"
+                  }
+          
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        isbn:
+          type: string
+        publishedYear:
+          type: integer 
