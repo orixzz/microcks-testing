@@ -55,7 +55,7 @@ paths:
       summary: Get book by ID
       operationId: getBook
       x-microcks-operation:
-        delay: 100
+        delay: 3000
         dispatcher: SCRIPT
         dispatcherRules: |
           def url = mockRequest.getRequest().getRequestURI();
@@ -125,7 +125,54 @@ paths:
           x-microcks-refs:
             - delete_hobbit
             - delete_1984
-          
+  /books/latest:
+    get:
+      summary: Get latest book with server timestamp
+      operationId: getLatestBook
+      x-microcks-operation:
+        dispatcher: URI_PARAMS
+        dispatcherRules: latest_book
+      parameters:
+        - name: requestedBy
+          in: query
+          required: false
+          schema:
+            type: string
+          examples:
+            latest_book:
+              value: "test-user"
+      responses:
+        '200':
+          description: Latest book with server details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Book'
+                  - type: object
+                    properties:
+                      serverTime:
+                        type: string
+                      dynamicValues:
+                        type: object
+              examples:
+                latest_book:
+                  value: {
+                    "id": "{{uuid()}}",
+                    "title": "1984",
+                    "author": "{{randomFullName()}}",
+                    "isbn": "{{randomInt(100000000000, 999999999999)}}",
+                    "publishedYear": 1949,
+                    "serverTime": "{{now('yyyy-MM-dd HH:mm:ss')}}",
+                    "dynamicValues": {
+                      "randomEmail": "{{randomEmail()}}",
+                      "randomCity": "{{randomCity()}}",
+                      "randomPhoneNumber": "{{randomPhoneNumber()}}",
+                      "randomBoolean": "{{randomBoolean()}}",
+                      "randomString": "{{randomString(10)}}"
+                    }
+                  }
+
 components:
   schemas:
     Book:
