@@ -90,4 +90,22 @@ public class MicrocksTesting {
                     .containsEntry("message", "Book not found");
         }
     }
+
+    @Test
+    void shouldDeleteBooks() {
+        // Test both reference cases from x-microcks-refs
+        String[] bookIds = {"1", "2"};  // The Hobbit and 1984
+        for (String bookId : bookIds) {
+            // When
+            ResponseEntity<Void> response = restTemplate.exchange(
+                    MICROCKS.getRestMockEndpoint("Library API", "1.0.0") + "/books/" + bookId,
+                    HttpMethod.DELETE,
+                    null,
+                    Void.class
+            );
+
+            // Then
+            assertThat(response.getStatusCode().value()).isEqualTo(204);
+        }
+    }
 }

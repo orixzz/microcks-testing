@@ -104,6 +104,27 @@ paths:
                   value: {
                     "message": "Book not found"
                   }
+    delete:
+      summary: Delete a book by ID
+      operationId: deleteBook
+      parameters:
+        - name: id
+          in: path
+          description: ID of the book to delete
+          required: true
+          schema:
+            type: string
+          examples:
+            delete_hobbit:
+              value: "1"
+            delete_1984:
+              value: "2"
+      responses:
+        '204':
+          description: Book successfully deleted
+          x-microcks-refs:
+            - delete_hobbit
+            - delete_1984
           
 components:
   schemas:

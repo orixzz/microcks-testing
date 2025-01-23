@@ -40,3 +40,9 @@ responses:
       - laurent_jp
 copy
 When Microcks will receive DELETE /owner/laurent/car/307 or DELETE /owner/laurent/car/jean-pierre call, it will just reply using a 204 HTTP response code.
+
+
+Work out dynamic URL injects to use this as an external service with application code
+Dynamic Injection during testing
+
+Look further into 
