@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @Testcontainers
 @SpringBootTest
-public class MicrocksTesting {
-    private static final Logger log = LoggerFactory.getLogger(MicrocksTesting.class);
+class MicrocksTest {
+    private static final Logger log = LoggerFactory.getLogger(MicrocksTest.class);
 
     @Container
     @SuppressWarnings("resource")

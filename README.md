@@ -38,3 +38,5 @@ https://microcks.io/documentation/references/artifacts/openapi-conventions/
 ## TODO
 Work out dynamic URL injects to use this as an external service with application code
 Dynamic Injection during testing
+
+https://www.baeldung.com/spring-dynamicpropertysource
