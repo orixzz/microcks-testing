@@ -27,7 +27,6 @@ class MicrocksTest {
     private static final Logger log = LoggerFactory.getLogger(MicrocksTest.class);
 
     @Container
-    @SuppressWarnings("resource")
     static final MicrocksContainer MICROCKS = new MicrocksContainer(
             DockerImageName.parse("quay.io/microcks/microcks-uber:latest"))
             .withMainArtifacts("library-api.yaml");
@@ -56,7 +55,7 @@ class MicrocksTest {
         log.info("Received {} books in response", response.getBody().size());
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).hasSize(2);
-        assertThat(response.getBody().get(0))
+        assertThat(response.getBody().getFirst())
                 .containsEntry("title", "The Hobbit")
                 .containsEntry("author", "J.R.R. Tolkien");
     }
